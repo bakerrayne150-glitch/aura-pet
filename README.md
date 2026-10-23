@@ -26,10 +26,25 @@ Flutter · Dart · Supabase (auth + edge functions) · Play Billing (`in_app_pur
 - `lib/screens/` — pet view, chat, settings
 - `lib/widgets/` — the creature (CustomPainter), stat bars, action overlays
 - `android/` — home-screen widget (Kotlin provider, layouts, resources)
+- `supabase/` — backend: edge functions, DB migration, `.env.example`
 
 ## Getting started
+
+### App
 
 1. Install the Flutter SDK (>= 3.38.1, Dart >= 3.10.0)
 2. `flutter pub get`
 3. Put your Supabase project URL and anon key in `lib/main.dart` (`Supabase.initialize`)
 4. `flutter run`
+
+### Backend (Supabase)
+
+1. `supabase/migrations/001_aura_pet_schema.sql` — run in the Supabase SQL editor
+2. `supabase/functions/chat` — AI chat proxy (server-side LLM key, trial + daily cap enforced)
+3. `supabase/functions/verify-subscription` — Play Billing purchase verification
+4. Copy `supabase/.env.example` to `supabase/.env`, fill in real values (**never commit `.env`**), then:
+   ```bash
+   supabase functions deploy chat
+   supabase functions deploy verify-subscription
+   supabase secrets set LLM_API_KEY=... PLAY_SERVICE_ACCOUNT=...
+   ```
